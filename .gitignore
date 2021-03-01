@@ -3,4 +3,5 @@
 .env
 **.log
 /.vscode
-
+yarn.lock
+package-lock.json
