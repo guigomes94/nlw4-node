@@ -33,18 +33,18 @@ class SendMailController {
       });
     }
 
+    const surveyUserExists = await surveysUsers.findOne({
+      where: [{ user_id: userExists.id, value: null }],
+      relations: ["user", "survey"],
+    });
+
     const variables = {
       name: userExists.name,
       title: surveyExists.title,
       description: surveyExists.description,
-      user_id: userExists.id,
+      id: surveyUserExists ? surveyUserExists.id : "",
       link: process.env.URL_MAIL
     }
-
-    const surveyUserExists = await surveysUsers.findOne({
-      where: [{user_id: userExists.id}, {value: null}],
-      relations: ["user", "survey"],
-    });
 
     if (surveyUserExists) {
       await SendMailService.execute(email, surveyExists.title, variables, npsPath);
@@ -58,10 +58,8 @@ class SendMailController {
 
     await surveysUsers.save(surveyUser);
 
-    
+    variables.id = surveyUser.id;
 
-    
-    
     await SendMailService.execute(email, surveyExists.title, variables, npsPath);
 
     return res.json(surveyUser);

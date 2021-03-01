@@ -1,7 +1,6 @@
 import nodemailer, { Transporter } from "nodemailer";
 import handlebars from "handlebars";
 import fs from "fs";
-import { Subject } from "typeorm/persistence/Subject";
 
 class SendMailService {
 
@@ -16,6 +15,9 @@ class SendMailService {
         auth: {
           user: account.user,
           pass: account.pass,
+        },
+        tls: {
+          rejectUnauthorized: false
         }
       });
 
